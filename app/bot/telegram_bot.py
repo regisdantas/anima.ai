@@ -16,14 +16,14 @@ from handlers.terms import terms, accept_terms, decline_terms
 
 class AnimaAITelegramBot:
     def __init__(self, token: str):
-        load_dotenv()
+        if not token:
+            raise ValueError("Telegram bot Token was not provided.")
+
         self.token = token
 
         with open("app/bot/lang/pt_BR.json", "r") as file:
             self.messages = json.load(file)
 
-        if not self.token:
-            raise ValueError("Telegram bot Token was not provided.")
         df = Defaults(block=False)
         self.app = Application.builder().token(self.token).connect_timeout(30).defaults(df).build()
         self.setup_handlers()

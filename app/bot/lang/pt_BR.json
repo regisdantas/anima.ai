@@ -1,0 +1,13 @@
+{
+    "commands": {
+        "start": "start",
+        "help": "help",
+        "customize": "customizar",
+        "history": "historico",
+        "terms": "termos",
+        "accept_terms": "aceitar_termos",
+        "decline_terms": "recusar_termos",
+        "credits": "creditos",
+        "payments": "pagamentos"
+    }
+}

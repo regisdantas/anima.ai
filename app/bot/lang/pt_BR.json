@@ -9,5 +9,10 @@
         "decline_terms": "recusar_termos",
         "credits": "creditos",
         "payments": "pagamentos"
+    },
+    "messages": {
+        "known-user": "Olá {user_name}!!!",
+        "new-user": "Olá! Você é novo(a) por aqui!\n",
+        "welcome": "Seja Bem-Vindo(a) ao Anima.IA.\n"
     }
 }

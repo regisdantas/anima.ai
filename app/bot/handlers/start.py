@@ -5,15 +5,18 @@ from app.bot.utils.context_utils import (
     load_user
 )
 
+from app.bot.lang.lang_loader import get_language
+language = get_language()
+
 async def handle_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    global language
     user = load_user(update, context)
-    print(user)
     if user: 
-        welcome_message = f"Hello, {user.name}! Welcome to Anima AI Bot."
-        await update.message.reply_text(welcome_message)
+        await update.message.reply_text(language['messages']['known-user'].format(user_name=user.name))
     else:
-        await update.message.reply_text("Hello. What's your name?")
+        await update.message.reply_text(language['messages']['new-user'])
+    await update.message.reply_text(language['messages']['welcome'])
 
 
 async def handle_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("Help Menu")
+    await update.message.reply_text(language['messages']['welcome'])

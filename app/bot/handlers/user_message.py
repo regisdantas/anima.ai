@@ -11,6 +11,9 @@ from app.bot.utils.context_utils import (
     load_user
 )
 
+from app.bot.lang.lang_loader import get_language
+language = get_language()
+
 async def send_response(user: User, result: str, metadata: Any):
     update = cast(Update, metadata)
     await update.message.reply_text(result)

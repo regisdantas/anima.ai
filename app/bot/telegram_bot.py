@@ -10,10 +10,11 @@ from telegram.ext import (
     filters
 )
 
-from app.bot.lang.lang_loader import get_language
+from app.bot.lang.language import get_text
 from app.bot.handlers.start import handle_start, handle_help
 from app.bot.handlers.credits import handle_credits, handle_payments
 from app.bot.handlers.history import handle_history
+from app.bot.handlers.example import handle_example
 from app.bot.handlers.customization import handle_customize
 from app.bot.handlers.terms import handle_terms, handle_accept_terms, handle_decline_terms
 from app.bot.handlers.user_message import handle_user_message
@@ -24,22 +25,22 @@ class AnimaAITelegramBot:
     def __init__(self, token: str):
         if not token:
             raise ValueError("Telegram bot Token was not provided.")
-        self.language = get_language()
         df = Defaults(block=False)
         self.app = Application.builder().token(token).connect_timeout(30).defaults(df).build()
         self.setup_handlers()
     
     def setup_handlers(self):
-        print(self.language['commands'])
-        self.app.add_handler(CommandHandler(self.language["commands"]["start"], handle_start))
-        self.app.add_handler(CommandHandler(self.language["commands"]["help"], handle_help))
-        self.app.add_handler(CommandHandler(self.language["commands"]["credits"], handle_credits))
-        self.app.add_handler(CommandHandler(self.language["commands"]["payments"], handle_payments))
-        self.app.add_handler(CommandHandler(self.language["commands"]["history"], handle_history))
-        self.app.add_handler(CommandHandler(self.language["commands"]["customize"], handle_customize))
-        self.app.add_handler(CommandHandler(self.language["commands"]["terms"], handle_terms))
-        self.app.add_handler(CommandHandler(self.language["commands"]["accept_terms"], handle_accept_terms))
-        self.app.add_handler(CommandHandler(self.language["commands"]["decline_terms"], handle_decline_terms))
+        print(get_text("pt_BR", "commands"))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.start"), handle_start))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.help"), handle_help))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.credits"), handle_credits))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.payments"), handle_payments))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.history"), handle_history))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.example"), handle_example))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.customize"), handle_customize))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.terms"), handle_terms))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.accept_terms"), handle_accept_terms))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.decline_terms"), handle_decline_terms))
 
         self.app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_user_message))
 

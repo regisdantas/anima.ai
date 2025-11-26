@@ -7,12 +7,10 @@ from telegram.constants import ChatAction
 from app.anima.models.user import User
 from app.anima.dream_pipeline import handle_dream
 from app.bot.utils.context_utils import (
-    get_message_obj,
     load_user
 )
 
-from app.bot.lang.lang_loader import get_language
-language = get_language()
+from app.bot.lang.language import get_text
 
 async def send_response(user: User, result: str, metadata: Any):
     update = cast(Update, metadata)
@@ -23,10 +21,14 @@ async def handle_user_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
     if user:
         user_msg = update.message.text
-        interpret_message = f"Ok, {user.name}! Let me try to interpret this one."
+        if len(user_msg) < 10:
+            too_short_message = get_text("pt_BR", "messages.user-message.prompt-too-short").format(user_name=user.name)
+            await update.message.reply_text(too_short_message)
+            return
+
+        interpret_message = get_text("pt_BR", "messages.user-message.prompt-ok").format(user_name=user.name)
         await update.message.reply_text(interpret_message)
         await handle_dream(user, user_msg, send_response, update)
-
     else:
-        await update.message.reply_text("I could not locate your user ID.")
+        await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
 

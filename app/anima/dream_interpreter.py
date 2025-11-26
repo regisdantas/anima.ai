@@ -1,6 +1,8 @@
 import json
 from app.llm.llm_factory import get_llm
 
+prompts = {}
+
 with open("app/anima/prompts/jung.json", "r") as file:
     prompts['jung'] = json.load(file)
 

@@ -3,7 +3,7 @@ import asyncio
 import uuid
 
 from dotenv import load_dotenv
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain_community.chat_message_histories import ChatMessageHistory
 
 class OpenAILLMProvider:

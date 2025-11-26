@@ -9,13 +9,20 @@ from app.anima.dream_pipeline import handle_dream
 from app.bot.utils.context_utils import (
     load_user
 )
-
+from app.llm.llm_factory import get_llm
 from app.bot.lang.language import get_text
 
 async def send_response(user: User, result: list[str], metadata: Any):
+    llm = get_llm()
     update = cast(Update, metadata)
     for res in result:
         await update.message.reply_text(res)
+
+    audio_offer_message = get_text("pt_BR", "messages.user-message.audio-offer")
+    await update.message.reply_text(audio_offer_message)
+
+    audio = await llm.generate_tts("\n".join(result))
+    await update.message.reply_voice(voice=audio)
 
 async def handle_user_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = load_user(update, context)

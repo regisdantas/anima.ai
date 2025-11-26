@@ -7,20 +7,21 @@ prompts = {}
 with open("app/anima/prompts/jung.json", "r") as file:
     prompts['jung'] = json.load(file)
 
-async def interpret_dream(dream_description: str) -> str:
+async def interpret_dream(dream_description: str, history: str) -> str:
     global prompts
-    final_response = []
-    current_response = ""
     llm = get_llm()
-    for topic in prompts['jung']['topics']:
-        print(topic)
-        prompt = prompts['jung']["interpretation_prompt"].format(uuid=str(uuid.uuid4()),
-                                                                 lines=3,
-                                                                 current_topic=topic,
-                                                                 dream_description=dream_description,
-                                                                 history="",
-                                                                 current_response=current_response)
-        response = await llm.generate_response(prompt)
-        current_response += f"# {topic}\n{response.content}\n"
-        final_response.append(response.content)
-    return final_response
+    retries = 3
+    while retries > 0:
+        try:
+            prompt = prompts['jung']["interpretation_prompt"].format(uuid=str(uuid.uuid4()),
+                                                             lines=20,
+                                                             dream_description=dream_description,
+                                                             history=history)
+            response = await llm.generate_response(prompt)
+            break
+        except Exception as e:
+            retries -= 1
+            if retries == 0:
+                raise e
+    return [ response.content ]
+

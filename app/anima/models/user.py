@@ -23,4 +23,7 @@ class User:
             return False
         self._credit_balance -= amount
         return True
+
+    def get_history(self) -> str:
+        return ""
     

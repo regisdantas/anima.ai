@@ -5,6 +5,7 @@ import uuid
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_community.chat_message_histories import ChatMessageHistory
+from openai import AsyncOpenAI
 
 class OpenAILLMProvider:
     def __init__(self, api_key: str = None, model_name: str = "gpt-4o-mini"):
@@ -15,6 +16,7 @@ class OpenAILLMProvider:
         self.session_id = str(uuid.uuid4())
         self.memory = ChatMessageHistory()
         self.llm = ChatOpenAI(model_name=model_name, openai_api_key=api_key)
+        self.client = AsyncOpenAI(api_key=api_key)
 
     def get_session_history(self, session_id):
         return self.memory
@@ -22,6 +24,15 @@ class OpenAILLMProvider:
     async def generate_response(self, prompt: str):
         response = await self.llm.ainvoke(prompt)
         return response
+
+    async def generate_tts(self, text: str):
+        response = await self.client.audio.speech.create(
+            model="gpt-4o-mini-tts",
+            voice="alloy",
+            input=text,
+            instructions="Fale em português do Brasil.",
+        )
+        return await response.aread()
 
 async def main():
     load_dotenv()

@@ -25,7 +25,8 @@
         },
         "user-message": {
             "prompt-too-short": "Sua descrição do sonho parece muito curta, {user_name}. Por favor, forneça mais detalhes.",
-            "prompt-ok": "Obrigado por compartilhar seu sonho, {user_name}! Deixe-me ver..."
+            "prompt-ok": "Obrigado por compartilhar seu sonho, {user_name}! Deixe-me ver...",
+            "audio-offer": "Estou gravando em áudio, para facilitar. Aguarde um momento..."
         },
         "credits": {
             "credits-menu": "Você tem {credit_balance} créditos disponíveis."

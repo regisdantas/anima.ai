@@ -10,12 +10,12 @@ from telegram.ext import (
     filters
 )
 
-from handlers.start import handle_start, handle_help
-from handlers.credits import handle_credits, handle_payments
-from handlers.history import handle_history
-from handlers.customization import handle_customize
-from handlers.terms import handle_terms, handle_accept_terms, handle_decline_terms
-from handlers.user_message import handle_user_message
+from app.bot.handlers.start import handle_start, handle_help
+from app.bot.handlers.credits import handle_credits, handle_payments
+from app.bot.handlers.history import handle_history
+from app.bot.handlers.customization import handle_customize
+from app.bot.handlers.terms import handle_terms, handle_accept_terms, handle_decline_terms
+from app.bot.handlers.user_message import handle_user_message
 
 class AnimaAITelegramBot:
     def __init__(self, token: str):
@@ -44,7 +44,6 @@ class AnimaAITelegramBot:
 
         self.app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_user_message))
 
-    
     def start(self):
         self.app.run_polling()
 

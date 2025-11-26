@@ -12,9 +12,10 @@ from app.bot.utils.context_utils import (
 
 from app.bot.lang.language import get_text
 
-async def send_response(user: User, result: str, metadata: Any):
+async def send_response(user: User, result: list[str], metadata: Any):
     update = cast(Update, metadata)
-    await update.message.reply_text(result)
+    for res in result:
+        await update.message.reply_text(res)
 
 async def handle_user_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = load_user(update, context)

@@ -9,7 +9,8 @@
         "accept_terms": "aceito",
         "decline_terms": "deletar",
         "credits": "creditos",
-        "payments": "pagamentos"
+        "payments": "pagamentos",
+        "audio": "audio"
     },
     "messages": {
         "unknown-user": "Usuário desconhecido. Por favor, inicie com /start.",
@@ -26,7 +27,9 @@
         "user-message": {
             "prompt-too-short": "Sua descrição do sonho parece muito curta, {user_name}. Por favor, forneça mais detalhes.",
             "prompt-ok": "Obrigado por compartilhar seu sonho, {user_name}! Deixe-me ver...",
-            "audio-offer": "Estou gravando em áudio, para facilitar. Aguarde um momento..."
+            "audio-offer": "Posso enviar em áudio, se preferir. Por apenas {value} créditos.\n Só me enviar:\n/audio",
+            "audio-processing": "Beleza, estou gravando. Aguarde um momento...",
+            "audio-error": "Desculpe, não consegui gravar o áudio. Por favor, tente novamente mais tarde."
         },
         "credits": {
             "credits-menu": "Você tem {credit_balance} créditos disponíveis."

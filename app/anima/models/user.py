@@ -6,6 +6,7 @@ class User:
         self.name = name
         self.telegram_id = telegram_id
         self._credit_balance = 0
+        self._last_response = None
     
     @property
     def uuid(self):
@@ -26,4 +27,14 @@ class User:
 
     def get_history(self) -> str:
         return ""
+    
+    @property
+    def last_response(self):
+        return self._last_response
+    
+    @last_response.setter
+    def last_response(self, response):
+        self._last_response = response
+
+    
     

@@ -18,8 +18,7 @@ from app.bot.handlers.example import handle_example
 from app.bot.handlers.customization import handle_customize
 from app.bot.handlers.terms import handle_terms, handle_accept_terms, handle_decline_terms
 from app.bot.handlers.user_message import handle_user_message
-
-
+from app.bot.handlers.audio import handle_audio
 
 class AnimaAITelegramBot:
     def __init__(self, token: str):
@@ -41,6 +40,7 @@ class AnimaAITelegramBot:
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.terms"), handle_terms))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.accept_terms"), handle_accept_terms))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.decline_terms"), handle_decline_terms))
+        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.audio"), handle_audio))
 
         self.app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_user_message))
 

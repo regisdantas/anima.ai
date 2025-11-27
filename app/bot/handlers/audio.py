@@ -12,27 +12,33 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     user = load_user(update, context)
     llm = get_llm()
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
-    if user:
-        if not user.last_response:
+    if not user:
+        await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
+        return
+
+    if not user.last_response:
+        await update.message.reply_text(get_text("pt_BR", "messages.user-message.no-audio"))
+        return
+
+    await update.message.reply_text(get_text("pt_BR", "messages.user-message.audio-processing"))
+    for res in user.last_response:
+        retries = 2
+        while retries > 0:
+            try:
+                audio = await llm.generate_tts(res)
+                break
+            except Exception as e:
+                retries -= 1
+                if retries == 0:
+                    await update.message.reply_text(get_text("pt_BR", "messages.user-message.audio-error"))
+                    return
+        try:
+            await update.message.reply_voice(voice=audio)
+        except Exception as e:
             await update.message.reply_text(get_text("pt_BR", "messages.user-message.audio-error"))
             return
 
-        await update.message.reply_text(get_text("pt_BR", "messages.user-message.audio-processing"))
-        for res in user.last_response:
-            retries = 2
-            while retries > 0:
-                try:
-                    audio = await llm.generate_tts(res)
-                    break
-                except Exception as e:
-                    retries -= 1
-                    if retries == 0:
-                        await update.message.reply_text(get_text("pt_BR", "messages.user-message.audio-error"))
-                        return
-            await update.message.reply_voice(voice=audio)
+    user.last_response = None
 
-        user.last_response = None
-    else:
-        await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
 
 

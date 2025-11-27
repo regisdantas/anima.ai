@@ -18,7 +18,7 @@ from app.bot.handlers.history import handle_history
 from app.bot.handlers.example import handle_example
 from app.bot.handlers.customization import handle_customize
 from app.bot.handlers.terms import handle_terms, handle_accept_terms, handle_decline_terms
-from app.bot.handlers.user_message import handle_user_message
+from app.bot.handlers.user_message import handle_user_message, handle_voice_message
 from app.bot.handlers.audio import handle_audio
 
 class AnimaAITelegramBot:
@@ -43,6 +43,7 @@ class AnimaAITelegramBot:
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.audio"), handle_audio))
 
         self.app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_user_message))
+        self.app.add_handler(MessageHandler(filters.VOICE, handle_voice_message))
 
     def start(self):
         self.app.run_polling()

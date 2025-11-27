@@ -1,6 +1,7 @@
 import os
 import asyncio
 import uuid
+from io import BytesIO
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
@@ -35,6 +36,14 @@ class OpenAILLMProvider:
             instructions="Fale em português do Brasil.",
         )
         return await response.aread()
+
+    async def transcribe_audio(self, audio_bytes: BytesIO) -> str:
+        response = await self.client.audio.transcriptions.create(
+            model="gpt-4o-mini-transcribe",
+            file=("audio.ogg", audio_bytes, "audio/ogg"),
+            language="pt"
+        )
+        return response.text
 
 async def main():
     load_dotenv()

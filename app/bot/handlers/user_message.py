@@ -1,9 +1,11 @@
 from typing import Any, cast
+from io import BytesIO
 
 from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ChatAction
 
+from app.llm.llm_factory import get_llm
 from app.anima.models.user import User
 from app.anima.dream_pipeline import handle_dream
 from app.bot.utils.context_utils import (
@@ -24,16 +26,50 @@ async def send_response(user: User, result: list[str], metadata: Any):
 async def handle_user_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = load_user(update, context)
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
-    if user:
-        user_msg = update.message.text
-        if len(user_msg) < 10:
-            too_short_message = get_text("pt_BR", "messages.user-message.prompt-too-short").format(user_name=user.name)
-            await update.message.reply_text(too_short_message)
-            return
 
-        interpret_message = get_text("pt_BR", "messages.user-message.prompt-ok").format(user_name=user.name)
-        await update.message.reply_text(interpret_message)
-        await handle_dream(user, user_msg, send_response, update)
-    else:
+    if not user:
         await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
+        return
 
+    user_msg = update.message.text
+    if len(user_msg) < 10:
+        too_short_message = get_text("pt_BR", "messages.user-message.prompt-too-short").format(user_name=user.name)
+        await update.message.reply_text(too_short_message)
+        return
+
+    interpret_message = get_text("pt_BR", "messages.user-message.prompt-ok").format(user_name=user.name)
+    await update.message.reply_text(interpret_message)
+    await handle_dream(user, user_msg, send_response, update)
+
+async def handle_voice_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    user = load_user(update, context)
+    llm = get_llm()
+
+    await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
+    if not user:
+        await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
+        return
+
+    voice = update.message.voice
+    tg_file = await voice.get_file()
+    buffer = BytesIO()
+    await tg_file.download_to_memory(out=buffer)
+    buffer.seek(0)
+
+    await update.message.reply_text(get_text("pt_BR", "messages.user-message.transcribe-processing"))
+
+    retries = 2
+    while retries > 0:
+        try:
+            text = await llm.transcribe_audio(buffer)
+            break
+        except Exception as e:
+            retries -= 1
+            if retries == 0:
+                await update.message.reply_text(get_text("pt_BR", "messages.user-message.transcribe-error"))
+                return
+
+    await update.message.reply_text(f"📝 Transcrição:\n{text}")
+    interpret_message = get_text("pt_BR", "messages.user-message.prompt-ok").format(user_name=user.name)
+    await update.message.reply_text(interpret_message)
+    await handle_dream(user, text, send_response, update)

@@ -10,8 +10,9 @@ def get_llm():
     if _llm_instance is None:
         load_dotenv()
         api_key = os.getenv("OPENAI_API_KEY")
+        model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         _llm_instance = OpenAILLMProvider(
-            model_name="gpt-5.1",
+            model_name=model_name,
             api_key=api_key,
         )
 

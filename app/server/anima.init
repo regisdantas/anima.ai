@@ -12,8 +12,6 @@ NAME="anima.ai"
 USER="root"
 
 PROD_DIR="/root/production/anima.ai"
-DEV_DIR="/root/dev/anima.ai"
-BACKUP_DIR="/root/production/backups"
 VENV="$PROD_DIR/.venv/bin/python3"
 CMD="$VENV -m app.bot.telegram_bot"
 
@@ -72,14 +70,11 @@ deploy() {
 
     stop
 
-    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    mkdir -p "$BACKUP_DIR"
+    cd "$PROD_DIR" || exit 1
 
-    echo "Creating backup at $BACKUP_DIR/anima_$TIMESTAMP.tar.gz"
-    tar -czf "$BACKUP_DIR/anima_$TIMESTAMP.tar.gz" -C "$PROD_DIR" .
+    git fetch origin main
 
-    echo "Syncing new files from $DEV_DIR to $PROD_DIR..."
-    rsync -av --delete --exclude ".env" "$DEV_DIR"/ "$PROD_DIR"/
+    git pull origin main
 
     echo "Restarting service..."
     start

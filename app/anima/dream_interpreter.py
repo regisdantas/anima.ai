@@ -1,6 +1,6 @@
 import json
 import uuid
-from app.llm.llm_factory import get_llm
+from app.ai.ai import get_ai
 from app.bot.utils.format_utils import split_message
 
 prompts = {}
@@ -10,7 +10,7 @@ with open("app/anima/prompts/jung.json", "r") as file:
 
 async def interpret_dream(dream_description: str, history: str) -> str:
     global prompts
-    llm = get_llm()
+    ai = get_ai()
     retries = 3
     while retries > 0:
         try:
@@ -18,7 +18,7 @@ async def interpret_dream(dream_description: str, history: str) -> str:
                                                              lines=20,
                                                              dream_description=dream_description,
                                                              history="")
-            response = await llm.generate_response(prompt)
+            response = await ai["llm"].generate_response(prompt)
             break
         except Exception as e:
             retries -= 1

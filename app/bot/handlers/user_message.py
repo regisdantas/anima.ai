@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ChatAction
 
-from app.llm.llm_factory import get_llm
+from app.ai.ai import get_ai
 from app.anima.models.user import User
 from app.anima.dream_pipeline import handle_dream
 from app.bot.utils.context_utils import (
@@ -43,7 +43,7 @@ async def handle_user_message(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 async def handle_voice_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = load_user(update, context)
-    llm = get_llm()
+    ai = get_ai()
 
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
     if not user:
@@ -61,7 +61,7 @@ async def handle_voice_message(update: Update, context: ContextTypes.DEFAULT_TYP
     retries = 2
     while retries > 0:
         try:
-            text = await llm.transcribe_audio(buffer)
+            text = await ai["speech"].transcribe_audio(buffer)
             break
         except Exception as e:
             retries -= 1

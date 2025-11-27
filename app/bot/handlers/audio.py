@@ -5,12 +5,12 @@ from telegram.constants import ChatAction
 from app.bot.utils.context_utils import (
     load_user
 )
-from app.llm.llm_factory import get_llm
+from app.ai.ai import get_ai
 from app.bot.lang.language import get_text
 
 async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = load_user(update, context)
-    llm = get_llm()
+    ai = get_ai()
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
     if not user:
         await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
@@ -25,7 +25,7 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         retries = 2
         while retries > 0:
             try:
-                audio = await llm.generate_tts(res)
+                audio = await ai["speech"].generate_tts(res)
                 break
             except Exception as e:
                 retries -= 1

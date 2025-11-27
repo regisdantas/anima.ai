@@ -4,7 +4,9 @@ Anima.ai is a Python-based AI dream-interpretation assistant with OpenAI integra
 
 ## Telegram Bot
 
-![Anima AI Bot](doc/assets/anima.ai.bot.jpg)
+<p align="center">
+  <img src="doc/assets/anima.ai.bot.jpg" alt="Anima AI Bot" width="300">
+</p>
 
 ## 👤 Author
 

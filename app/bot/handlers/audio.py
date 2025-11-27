@@ -30,6 +30,8 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                         await update.message.reply_text(get_text("pt_BR", "messages.user-message.audio-error"))
                         return
             await update.message.reply_voice(voice=audio)
+
+        user.last_response = None
     else:
         await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
 

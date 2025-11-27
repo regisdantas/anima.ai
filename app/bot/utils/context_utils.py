@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 from app.anima.models.user import User
-
+from app.logger import log_info, log_error
 
 def get_message_obj(update: Update):
     if update.message:
@@ -32,5 +32,5 @@ def load_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return user
 
     except Exception as e:
-        print("[ERROR] An error occurred:", e)
+        log_error("[ERROR] An error occurred:", e)
         return None

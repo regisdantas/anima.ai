@@ -7,6 +7,8 @@ from langchain_openai import ChatOpenAI
 from langchain_community.chat_message_histories import ChatMessageHistory
 from openai import AsyncOpenAI
 
+from app.logger import log_info, log_error
+
 class OpenAILLMProvider:
     def __init__(self, api_key: str = None, model_name: str = "gpt-4o-mini"):
         if not api_key:

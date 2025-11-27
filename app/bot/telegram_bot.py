@@ -10,6 +10,7 @@ from telegram.ext import (
     filters
 )
 
+from app.logger import log_info, log_error
 from app.bot.lang.language import get_text
 from app.bot.handlers.start import handle_start, handle_help
 from app.bot.handlers.credits import handle_credits, handle_payments
@@ -29,7 +30,6 @@ class AnimaAITelegramBot:
         self.setup_handlers()
     
     def setup_handlers(self):
-        print(get_text("pt_BR", "commands"))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.start"), handle_start))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.help"), handle_help))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.credits"), handle_credits))

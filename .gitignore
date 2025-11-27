@@ -7,6 +7,7 @@ __pycache__/
 .env-development
 .env-testing
 
+*:Zone.Identifier
 # C extensions
 *.so
 

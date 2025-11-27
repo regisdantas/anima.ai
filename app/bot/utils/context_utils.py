@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from app.anima.models.user import User
+from app.database.models.user import User
 from app.logger import log_info, log_error
 
 def get_message_obj(update: Update):

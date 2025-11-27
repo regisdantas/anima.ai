@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from app.anima.models import user
+from app.database.models import user
 from app.bot.utils.context_utils import (
     get_message_obj,
     load_user

@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes
 from telegram.constants import ChatAction
 
 from app.ai.ai import get_ai
-from app.anima.models.user import User
+from app.database.models.user import User
 from app.anima.dream_pipeline import handle_dream
 from app.bot.utils.context_utils import (
     load_user

@@ -1,0 +1,6 @@
+pre-commit
+ruff
+isort
+mypy
+pylint
+python-lsp-server

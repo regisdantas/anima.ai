@@ -9,5 +9,5 @@ async def handle_terms(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def handle_accept_terms(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(get_text("pt_BR", "messages.terms.accepted-terms"))
 
-async def handle_decline_terms(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(get_text("pt_BR", "messages.terms.declined-terms"))
+async def handle_delete(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(get_text("pt_BR", "messages.terms.delete"))

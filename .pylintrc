@@ -1,0 +1,22 @@
+[MASTER]
+ignore=.venv
+jobs=1
+
+[MESSAGES CONTROL]
+disable=
+    C0114,  # missing module docstring
+    C0115,  # missing class docstring
+    C0116,  # missing function docstring
+    R0903,  # too-few-public-methods
+    R0201,  # no-self-use
+    W0511   # TODO
+
+[FORMAT]
+max-line-length=88
+indent-string='    '
+
+[BASIC]
+good-names=i,j,k,ex,Run,_,db
+
+[TYPECHECK]
+ignored-classes=typing.Any

@@ -1,7 +1,5 @@
 import os
-import json
 from dotenv import load_dotenv
-from telegram import Update
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -11,7 +9,6 @@ from telegram.ext import (
     filters
 )
 
-from app.logger import log_info, log_error
 from app.bot.lang.language import get_text
 from app.bot.handlers.start import handle_start, handle_help
 from app.bot.handlers.credits import handle_credits, handle_payments, handle_credits_callback

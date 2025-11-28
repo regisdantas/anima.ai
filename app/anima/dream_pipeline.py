@@ -1,7 +1,7 @@
 import asyncio
 from typing import Callable, Any
 
-from app.logger import log_info, log_error
+from app.logger import log_error
 from app.database.models.user import User
 from app.anima.dream_interpreter import interpret_dream
 

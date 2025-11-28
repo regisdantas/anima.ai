@@ -63,7 +63,7 @@ async def handle_voice_message(update: Update, context: ContextTypes.DEFAULT_TYP
         try:
             text = await ai["speech"].transcribe_audio(buffer)
             break
-        except Exception as e:
+        except Exception:
             retries -= 1
             if retries == 0:
                 await update.message.reply_text(get_text("pt_BR", "messages.user-message.transcribe-error"))

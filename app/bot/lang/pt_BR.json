@@ -27,7 +27,7 @@
         "user-message": {
             "prompt-too-short": "Sua descrição do sonho parece muito curta, {user_name}. Por favor, forneça mais detalhes.",
             "prompt-ok": "Obrigado por compartilhar seu sonho, {user_name}! Deixe-me ver...",
-            "audio-offer": "Posso enviar em áudio, se preferir. Por apenas {value} créditos.\n Só me enviar:\n\n    🎙️ /audio",
+            "audio-offer": "Posso enviar em áudio, se preferir. Por apenas {value} créditos.\n Só me enviar:\n\n    🔊 /audio",
             "audio-processing": "Beleza, estou gravando. Aguarde um momento...",
             "no-audio": "Desculpe, não tenho nada em memória para gravar.",
             "audio-error": "Desculpe, não consegui gravar o áudio. Por favor, tente novamente mais tarde.",

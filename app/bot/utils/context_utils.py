@@ -1,7 +1,8 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 from app.database.models.user import User
-from app.logger import log_info, log_error
+from app.logger import log_error
+
 
 def get_message_obj(update: Update):
     if update.message:
@@ -23,10 +24,7 @@ def load_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
             telegram_id = message.from_user.id
             name = message.from_user.first_name
 
-            user = User(
-                telegram_id=telegram_id,
-                name=name
-            )
+            user = User(telegram_id=telegram_id, name=name)
             user.add_credits(100)
             context.user_data["user"] = user
 

@@ -17,7 +17,7 @@ from app.bot.handlers.start import handle_start, handle_help
 from app.bot.handlers.credits import handle_credits, handle_payments, handle_credits_callback
 from app.bot.handlers.history import handle_history
 from app.bot.handlers.example import handle_example
-from app.bot.handlers.customization import handle_customize
+# from app.bot.handlers.customization import handle_customize
 from app.bot.handlers.terms import handle_terms, handle_accept_terms, handle_decline_terms
 from app.bot.handlers.user_message import handle_user_message, handle_voice_message
 from app.bot.handlers.audio import handle_audio
@@ -37,7 +37,7 @@ class AnimaAITelegramBot:
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.payments"), handle_payments))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.history"), handle_history))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.example"), handle_example))
-        self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.customize"), handle_customize))
+        # self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.customize"), handle_customize))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.terms"), handle_terms))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.accept_terms"), handle_accept_terms))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.decline_terms"), handle_decline_terms))

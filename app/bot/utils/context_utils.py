@@ -27,6 +27,7 @@ def load_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 telegram_id=telegram_id,
                 name=name
             )
+            user.add_credits(100)
             context.user_data["user"] = user
 
         return user

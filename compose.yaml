@@ -1,7 +1,0 @@
-services:
-  database:
-    image: 'postgres:18.1-alpine3.22'
-    environment:
-      - POSTGRES_USER=regisdantas
-      - POSTGRES_PASSWORD=LocalPassword@2025
-      - POSTGRES_DB=anima-ai

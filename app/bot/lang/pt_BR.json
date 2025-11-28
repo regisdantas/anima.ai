@@ -4,10 +4,10 @@
         "help": "help",
         "customize": "customizar",
         "history": "historico",
-        "example": "exemplo",
+        "tips": "dicas",
         "terms": "termos",
         "accept_terms": "aceito",
-        "decline_terms": "deletar",
+        "delete": "deletar",
         "credits": "creditos",
         "payments": "pagamentos",
         "audio": "audio"
@@ -17,17 +17,17 @@
         "welcome":{
             "known-user": "Olá {user_name}!!!",
             "new-user": "Olá! Você é novo(a) por aqui!\n",
-            "welcome-message": "🌙 **Bem-vindo ao Anima.AI** 🌙\n      **O Oráculo dos Sonhos**\n\nAqui, você pode registrar seus sonhos e receber interpretações profundas, simbólicas e personalizadas. Sempre com respeito, privacidade e sensibilidade. ✨\n\n🧠 **O Anima ajuda você a:**\n   ✅ Explorar o significado emocional e simbólico dos seus sonhos\n   ✅ Identificar padrões, temas recorrentes e mensagens do inconsciente\n   ✅ Acompanhar sua jornada de autoconhecimento ao longo do tempo\n\n---\n✨ **Comece por:**\n   📜 /termos - Leia termos de uso e política de privacidade\n   ✅ /aceito - Confirma que leu e aceita os termos\n   🗑️ /deletar - Remove todos os seus dados e histórico\n   📝 /exemplo - Veja como descrever um sonho da forma ideal e receba modelos prontos para enviar\n\n📚 **Outros comandos:**\n   💸 /creditos - Consulte seu saldo e veja como adquirir mais créditos\n   💰 /pagamentos - Verifique seus pagamentos e créditos pendentes\n   ❓ /help - Mostra esta mensagem novamente\n\n---\n\n🌌 **Pronto para começar?**\n\nSaldo atual: {user_balance} creditos.\n\nQuando quiser, é só me contar seu sonho ({value_description} créditos). Estou aqui para caminhar com você. ✨\n\n🎙️ Pode me enviar mensagens de áudio também ({value_audio} créditos)."
+            "welcome-message": "🌙 **Bem-vindo ao Anima.AI** 🌙\n      **O Oráculo dos Sonhos**\n\nAqui, você pode registrar seus sonhos e receber interpretações profundas, simbólicas e personalizadas. Sempre com respeito, privacidade e sensibilidade. ✨\n\n🧠 **O Anima ajuda você a:**\n   ✅ Explorar o significado emocional e simbólico dos seus sonhos\n   ✅ Identificar padrões, temas recorrentes e mensagens do inconsciente\n   ✅ Acompanhar sua jornada de autoconhecimento ao longo do tempo\n\n---\n✨ **Comece por:**\n   📜 /termos - Leia termos de uso e política de privacidade\n   ✅ /aceito - Confirma que leu e aceita os termos\n   🗑️ /deletar - Remove todos os seus dados e histórico\n   💡 /dicas - Veja dicas de como descrever um sonho da forma ideal. Receba um modelo e um exemplo.\n\n📚 **Outros comandos:**\n   💸 /creditos - Consulte seu saldo e veja como adquirir mais créditos\n   💰 /pagamentos - Verifique seus pagamentos e créditos pendentes\n   ❓ /help - Mostra esta mensagem novamente\n\n---\n\n🌌 **Pronto para começar?**\n\nSaldo atual: {user_balance} creditos.\n\nQuando quiser, é só me contar seu sonho ({value_description} créditos). Estou aqui para caminhar com você. ✨\n\n🎙️ Pode me enviar mensagens de áudio também ({value_audio} créditos)."
         },
         "terms": {
             "terms-and-conditions": "Aqui estão os Termos e Condições do Anima.IA...",
-            "accepted-terms": "Obrigado por aceitar os Termos e Condições.",
-            "declined-terms": "Você recusou os Termos e Condições."
+            "accept_terms": "Obrigado por aceitar os Termos e Condições.",
+            "delete": "Você recusou os Termos e Condições."
         },
         "user-message": {
             "prompt-too-short": "Sua descrição do sonho parece muito curta, {user_name}. Por favor, forneça mais detalhes.",
             "prompt-ok": "Obrigado por compartilhar seu sonho, {user_name}! Deixe-me ver...",
-            "audio-offer": "Posso enviar em áudio, se preferir. Por apenas {value} créditos.\n Só me enviar:\n/audio",
+            "audio-offer": "Posso enviar em áudio, se preferir. Por apenas {value} créditos.\n Só me enviar:\n\n    🎙️ /audio",
             "audio-processing": "Beleza, estou gravando. Aguarde um momento...",
             "no-audio": "Desculpe, não tenho nada em memória para gravar.",
             "audio-error": "Desculpe, não consegui gravar o áudio. Por favor, tente novamente mais tarde.",
@@ -40,17 +40,11 @@
             "bought": "Você comprou {} créditos.",
             "show-pix": "Só copiar e pagar via pix:",
             "check-payment": "Após efetuar o pagamento, digite:\n\n    💰 /pagamentos",
-            "error-pix": "Erro a gerar pagamento. Tente novamente mais tarde ou:\n\n    💬 /contato <mensagem>"
+            "error-pix": "Erro a gerar pagamento. Tente novamente mais tarde."
         },
         "payments": {
             "payments-menu": "Nenhum pagamento pendente."
         },
-        "customization": {
-            "customize-menu": "📌 **Abordagens disponíveis para as interpretações:**\n\n1.  [] Terapia Cognitivo-Comportamental\n2.  [] Kabbalah dos Sonhos\n3.  [] Hermetismo\n4.  [] Gnose\n5.  [] Eneagrama\n6.  [] Constelação Familiar\n7.  [] Psicodrama Interno  \n8.  [] Jung: Sombra, Anima, Sincronicidades\n9.  [] Sonhos como Mensagens do Corpo\n10. [] Astrologia Psicológica\n11. [] Espiritismo\n12. [] Ayurveda\n13. [] Taoísmo\n14. [] Sufismo\n15. [] Alinhamento de Chakras\n16. [] Shadow Work Moderno\n17. [] Memórias Emocionais\n18. [] Psicologia Arquetípica\n19. [] Psicologia Fenomenológica\n20. [] Sonhos como Premonição\n\nDigite os números das abordagems que deseja ativar/desativar."
-        },
-        "history": {
-            "history-menu": "Aqui está o seu histórico de sonhos."
-        },
-        "example": "Aqui está um exemplo de como descrever seu sonho para obter a melhor interpretação possível..."
+        "tips": "💡 Dicas para descrever seu sonho:\nModelo REVE\n\nPara que eu possa interpretar seu sonho com mais precisão, use o Modelo REVE, que ajuda você a organizar as informações mais importantes. Basta seguir estes pontos:\n\n🟦 R — Resumo do sonho\n\n* Conte o que aconteceu de forma simples e direta.\n* Inclua cenário, personagens e ação principal.\n\n🟩 E — Emoções durante o sonho\n\n* O que você sentiu no momento?\n* Houve mudança de emoção ao longo da cena?\n\n🟧 V — Vida atual (contexto)\n\n* Algo importante está acontecendo atualmente?\n* Conflitos, decisões, pressões, desejos, fases novas…\n\n🟪 E — Elementos simbólicos\n\n* Lugares (casa, escola, natureza, trabalho, infância).\n* Pessoas marcantes (ex, familiares, estranhos).\n* Objetos ou símbolos fortes (chaves, portas, água, animais).\n* Ações relevantes (fugir, procurar algo, voar, tentar falar).\n\n✨ Extra opcional\n\n* Como você acordou depois do sonho.\n* Se já sonhou algo parecido antes.\n\n🔍 Exemplo: \nSonhei que estava voltando para o prédio da minha antiga faculdade, caminhando por um corredor escuro e silencioso que me trazia uma mistura de nostalgia e ansiedade. Ao entrar numa sala de aula, vi meu pai sentado no fundo, me observando em silêncio, o que aumentava minha sensação de pressão. Eu carregava uma mochila extremamente pesada, dificultando meus passos, como se cada movimento exigisse muito esforço. Pela janela da sala, eu via um parque ensolarado com crianças brincando livremente, e isso despertava em mim frustração, pois eu não conseguia sair dali. Na vida real, estou passando por mudanças no trabalho e questionando se devo mudar de área; ultimamente tenho sentido muita pressão para tomar decisões importantes e uma sensação constante de estar preso entre caminhos diferentes. No sonho e ao acordar, senti um aperto no peito, como se estivesse carregando mais peso do que consigo sustentar."
     }
 }

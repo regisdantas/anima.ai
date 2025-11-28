@@ -5,6 +5,7 @@ from telegram import Update
 from telegram.ext import (
     Application,
     CommandHandler,
+    CallbackQueryHandler,
     Defaults,
     MessageHandler,
     filters
@@ -13,7 +14,7 @@ from telegram.ext import (
 from app.logger import log_info, log_error
 from app.bot.lang.language import get_text
 from app.bot.handlers.start import handle_start, handle_help
-from app.bot.handlers.credits import handle_credits, handle_payments
+from app.bot.handlers.credits import handle_credits, handle_payments, handle_credits_callback
 from app.bot.handlers.history import handle_history
 from app.bot.handlers.example import handle_example
 from app.bot.handlers.customization import handle_customize
@@ -41,6 +42,7 @@ class AnimaAITelegramBot:
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.accept_terms"), handle_accept_terms))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.decline_terms"), handle_decline_terms))
         self.app.add_handler(CommandHandler(get_text("pt_BR", "commands.audio"), handle_audio))
+        self.app.add_handler(CallbackQueryHandler(handle_credits_callback, pattern=r'^buy_'))
 
         self.app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_user_message))
         self.app.add_handler(MessageHandler(filters.VOICE, handle_voice_message))

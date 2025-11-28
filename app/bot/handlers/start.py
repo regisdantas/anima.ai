@@ -14,8 +14,8 @@ async def handle_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         await update.message.reply_text(get_text("pt_BR", "messages.welcome.known-user").format(user_name=user.name))
     else:
         await update.message.reply_text(get_text("pt_BR", "messages.welcome.new-user"))
-    await update.message.reply_text(get_text("pt_BR", "messages.welcome.welcome-message").format(value=20))
+    await update.message.reply_text(get_text("pt_BR", "messages.welcome.welcome-message").format(value_description=25, value_audio=40))
 
 
 async def handle_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(get_text("pt_BR", "messages.welcome.welcome-message").format(value=20))
+    await update.message.reply_text(get_text("pt_BR", "messages.welcome.welcome-message").format(value_description=25, value_audio=40))

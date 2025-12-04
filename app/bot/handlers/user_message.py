@@ -17,12 +17,13 @@ from app.database.repositories.user_repo import (
 from app.config.constants import VALUE_DESCRIPTION, VALUE_AUDIO
 
 
-async def send_response(user: User, result: list[str], metadata: Any):
-    update = cast(Update, metadata)
+async def send_response(user: User, result: list[str], metadata: dict):
+    update = cast(Update, metadata.get("update"))
+    context = cast(ContextTypes.DEFAULT_TYPE, metadata.get("context"))
+    context.user_data["last_response"] = result
+
     for res in result:
         await update.message.reply_text(res)
-
-    user.last_response = result
 
     audio_offer_message = get_text("pt_BR", "messages.user-message.audio-offer").format(
         value=VALUE_AUDIO
@@ -62,7 +63,9 @@ async def handle_user_message(
             user_name=user.name
         )
         await update.message.reply_text(interpret_message)
-        await handle_dream(user, user_msg, send_response, update)
+        await handle_dream(
+            user, user_msg, send_response, {"update": update, "context": context}
+        )
 
     except Exception:
         process_refund(user.telegram_id, VALUE_DESCRIPTION)
@@ -127,4 +130,6 @@ async def handle_voice_message(
         user_name=user.name
     )
     await update.message.reply_text(interpret_message)
-    await handle_dream(user, text, send_response, update)
+    await handle_dream(
+        user, text, send_response, {"update": update, "context": context}
+    )

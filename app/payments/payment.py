@@ -3,6 +3,7 @@ import mercadopago
 
 _payment_provider = None
 
+
 def get_payment_provider():
     global _payment_provider
     if _payment_provider is None:
@@ -12,26 +13,28 @@ def get_payment_provider():
         _payment_provider = mercadopago.SDK(access_token=access_token)
     return _payment_provider
 
+
 def generate_pix(value, email):
     payprov = get_payment_provider()
     payment = {
         "transaction_amount": value,
         "description": "Anima AI",
         "payment_method_id": "pix",
-        "payer": {
-            "email": email
-        }
+        "payer": {"email": email},
     }
 
     response = payprov.payment().create(payment)
     payment_info = response["response"]
 
     if "point_of_interaction" in payment_info:
-        pix_qr_code = payment_info["point_of_interaction"]["transaction_data"]["qr_code"]
+        pix_qr_code = payment_info["point_of_interaction"]["transaction_data"][
+            "qr_code"
+        ]
         payment_id = payment_info["id"]
         return (True, pix_qr_code, payment_id)
     else:
         return (False, None, None)
+
 
 def check_payment(pgid):
     payprov = get_payment_provider()

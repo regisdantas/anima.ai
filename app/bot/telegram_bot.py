@@ -23,7 +23,6 @@ from app.bot.handlers.tips import handle_tips
 from app.bot.handlers.terms import handle_terms, handle_delete
 from app.bot.handlers.user_message import handle_user_message, handle_voice_message
 from app.bot.handlers.audio import handle_audio
-from app.database.repositories.user_repo import create_users_table
 
 
 class AnimaAITelegramBot:
@@ -78,7 +77,6 @@ class AnimaAITelegramBot:
         self.app.add_handler(MessageHandler(filters.VOICE, handle_voice_message))
 
     def start(self):
-        create_users_table()
         self.app.run_polling()
 
 

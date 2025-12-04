@@ -23,8 +23,8 @@ def load_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not message:
             return None
 
-        name = message.from_user.first_name
-        telegram_id = message.from_user.id
+        name = message.chat.first_name
+        telegram_id = message.chat.id
 
         user = get_user_by_telegram_id(telegram_id)
 

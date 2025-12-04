@@ -5,12 +5,18 @@ from app.logger import log_error
 from app.database.models.user import User
 from app.anima.dream_interpreter import interpret_dream
 
-async def handle_dream(user: User, dream_description: str, callback: Callable[[User, list[str]], None], metadata: Any):
+
+async def handle_dream(
+    user: User,
+    dream_description: str,
+    callback: Callable[[User, list[str]], None],
+    metadata: Any,
+):
     async def _run():
         retries = 3
         while retries > 0:
             try:
-                result = await interpret_dream(dream_description, user.get_history())
+                result = await interpret_dream(dream_description, "")
                 break
             except Exception as e:
                 log_error("[ERROR] An error occurred:", e)

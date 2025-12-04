@@ -2,6 +2,6 @@ services:
   database:
     image: 'postgres:18.1-alpine3.22'
     environment:
-      POSTGRES_PASSWORD: "mylocal@password"
+      POSTGRES_PASSWORD: "minhasenha2025"
     ports:
       - '5432:5432'

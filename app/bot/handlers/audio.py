@@ -5,6 +5,7 @@ from telegram.constants import ChatAction
 from app.bot.utils.context_utils import load_user
 from app.ai.ai import get_ai
 from app.bot.lang.language import get_text
+from app.config.constants import VALUE_DESCRIPTION, VALUE_AUDIO
 
 
 async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -49,3 +50,10 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             return
 
     context.user_data["last_response"] = None
+    await update.message.reply_text(
+        get_text("pt_BR", "messages.menu").format(
+            user_balance=user.credit_balance if user else 0,
+            value_description=VALUE_DESCRIPTION,
+            value_audio=VALUE_AUDIO,
+        )
+    )

@@ -14,6 +14,7 @@ from app.database.repositories.user_repo import (
     process_request_and_debit,
     process_refund,
 )
+from app.config.constants import VALUE_DESCRIPTION, VALUE_AUDIO
 
 
 async def send_response(user: User, result: list[str], metadata: Any):
@@ -24,7 +25,7 @@ async def send_response(user: User, result: list[str], metadata: Any):
     user.last_response = result
 
     audio_offer_message = get_text("pt_BR", "messages.user-message.audio-offer").format(
-        value=20
+        value=VALUE_AUDIO
     )
     await update.message.reply_text(audio_offer_message)
 
@@ -49,7 +50,7 @@ async def handle_user_message(
         await update.message.reply_text(too_short_message)
         return
 
-    valid = process_request_and_debit(user.telegram_id, 25)
+    valid = process_request_and_debit(user.telegram_id, VALUE_DESCRIPTION)
     if not valid:
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.no-credits")
@@ -64,7 +65,7 @@ async def handle_user_message(
         await handle_dream(user, user_msg, send_response, update)
 
     except Exception:
-        process_refund(user.telegram_id, 25)
+        process_refund(user.telegram_id, VALUE_DESCRIPTION)
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.error").format(
                 user_balance=user.credit_balance
@@ -85,7 +86,7 @@ async def handle_voice_message(
         await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
         return
 
-    valid = process_request_and_debit(user.telegram_id, 40)
+    valid = process_request_and_debit(user.telegram_id, VALUE_AUDIO)
     if not valid:
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.no-credits-audio")
@@ -111,7 +112,7 @@ async def handle_voice_message(
             print(e)
             retries -= 1
             if retries == 0:
-                process_refund(user.telegram_id, 40)
+                process_refund(user.telegram_id, VALUE_AUDIO)
                 await update.message.reply_text(
                     get_text("pt_BR", "messages.user-message.transcribe-error").format(
                         user_balance=user.credit_balance
@@ -119,7 +120,9 @@ async def handle_voice_message(
                 )
                 return
 
-    await update.message.reply_text(f"📝 Transcrição:\n{text}")
+    await update.message.reply_text(
+        get_text("pt_BR", "messages.user-message.transcription") + text
+    )
     interpret_message = get_text("pt_BR", "messages.user-message.prompt-ok").format(
         user_name=user.name
     )

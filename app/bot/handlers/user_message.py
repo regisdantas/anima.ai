@@ -10,22 +10,37 @@ from app.database.models.user import User
 from app.anima.dream_pipeline import handle_dream
 from app.bot.utils.context_utils import load_user
 from app.bot.lang.language import get_text
+from app.logger import log_info, log_error
 from app.database.repositories.user_repo import (
     process_request_and_debit,
     process_refund,
 )
-from app.config.constants import VALUE_DESCRIPTION, VALUE_AUDIO
+from app.database.repositories.history_repo import (
+    create_history,
+    get_history_by_telegram_id,
+)
+from app.config.constants import VALUE_DESCRIPTION, VALUE_AUDIO_SPEECH
 
 
-async def send_response(user: User, result: list[str], metadata: Any):
-    update = cast(Update, metadata)
-    for res in result:
+async def send_response(user: User, result: dict, metadata: dict):
+    update = cast(Update, metadata.get("update"))
+    context = cast(ContextTypes.DEFAULT_TYPE, metadata.get("context"))
+    interpretation = result.get("interpretation")
+    context.user_data["last_response"] = interpretation
+
+    summary = result.get("summary")
+    create_history(
+        user_id=user.uuid,
+        telegram_id=user.telegram_id,
+        message_type="dream",
+        content=summary,
+    )
+
+    for res in interpretation:
         await update.message.reply_text(res)
 
-    user.last_response = result
-
     audio_offer_message = get_text("pt_BR", "messages.user-message.audio-offer").format(
-        value=VALUE_AUDIO
+        value=VALUE_AUDIO_SPEECH
     )
     await update.message.reply_text(audio_offer_message)
 
@@ -62,9 +77,17 @@ async def handle_user_message(
             user_name=user.name
         )
         await update.message.reply_text(interpret_message)
-        await handle_dream(user, user_msg, send_response, update)
+        history = get_history_by_telegram_id(telegram_id=user.telegram_id, count=4)
+        await handle_dream(
+            user,
+            user_msg,
+            history,
+            send_response,
+            {"update": update, "context": context},
+        )
 
-    except Exception:
+    except Exception as e:
+        log_error(e)
         process_refund(user.telegram_id, VALUE_DESCRIPTION)
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.error").format(
@@ -109,7 +132,7 @@ async def handle_voice_message(
             text = await ai["speech"].transcribe_audio(buffer)
             break
         except Exception as e:
-            print(e)
+            log_error(e)
             retries -= 1
             if retries == 0:
                 process_refund(user.telegram_id, VALUE_AUDIO)
@@ -127,4 +150,7 @@ async def handle_voice_message(
         user_name=user.name
     )
     await update.message.reply_text(interpret_message)
-    await handle_dream(user, text, send_response, update)
+    history = get_history_by_telegram_id(telegram_id=user.telegram_id, count=4)
+    await handle_dream(
+        user, text, history, send_response, {"update": update, "context": context}
+    )

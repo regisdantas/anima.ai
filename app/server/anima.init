@@ -11,6 +11,11 @@
 NAME="anima.ai"
 USER="root"
 
+DB_NAME="anima"
+DB_USER="postgres"
+DB_HOST="localhost"
+DB_PORT="5432"
+
 PROD_DIR="/root/production/anima.ai"
 VENV="$PROD_DIR/.venv/bin/python3"
 CMD="$VENV -m app.bot.telegram_bot"
@@ -18,11 +23,114 @@ CMD="$VENV -m app.bot.telegram_bot"
 PIDFILE="/var/run/$NAME.pid"
 LOGFILE="/var/log/$NAME.log"
 
+
+start_database() {
+    cd "$PROD_DIR" || exit 1
+
+    echo "🐳 Starting Docker services..."
+    docker compose -f infra/compose.yaml up --force-recreate -d
+    if [ $? -ne 0 ]; then
+        echo "❌ Failed to start database container."
+        return 1
+    fi
+
+    sleep 10
+    echo "🔍 Checking if database '$DB_NAME' exists..."
+
+    DB_EXISTS=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -tAc \
+        "SELECT 1 FROM pg_database WHERE datname='$DB_NAME';")
+
+    if [ "$DB_EXISTS" = "1" ]; then
+        echo "✔️ Database '$DB_NAME' already exists."
+    else
+        echo "🛠️ Creating database '$DB_NAME'..."
+        psql -h $DB_HOST -p $DB_PORT -U $DB_USER -c "CREATE DATABASE $DB_NAME;"
+    fi
+
+    echo "🔍 Checking if table 'users' exists..."
+
+    TABLE_EXISTS=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -tAc \
+        "SELECT 1 FROM information_schema.tables WHERE table_name='users';")
+
+    if [ "$TABLE_EXISTS" = "1" ]; then
+        echo "✔️ Table 'users' already exists."
+    else
+        echo "📦 Creating table 'users'..."
+        psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+            CREATE TABLE users (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                name TEXT,
+                telegram_id TEXT UNIQUE,
+                credits INT DEFAULT 0,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+        "
+    fi
+
+    echo "🔍 Checking if table 'history' exists..."
+
+    TABLE_EXISTS=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -tAc \
+        "SELECT 1 FROM information_schema.tables WHERE table_name='history';")
+
+    if [ "$TABLE_EXISTS" = "1" ]; then
+        echo "✔️ Table 'history' already exists."
+    else
+        echo "📦 Creating table 'history'..."
+        psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+            CREATE TABLE history (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users (id),
+                telegram_id TEXT NOT NULL,
+                message_type TEXT,
+                content TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+        "
+    fi
+
+    echo "🔍 Checking if table 'payments' exists..."
+
+    TABLE_EXISTS=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -tAc \
+        "SELECT 1 FROM information_schema.tables WHERE table_name='payments';")
+
+    if [ "$TABLE_EXISTS" = "1" ]; then
+        echo "✔️ Table 'payments' already exists."
+    else
+        echo "📦 Creating table 'payments'..."
+        psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+            CREATE TABLE payments (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users (id),
+                telegram_id TEXT NOT NULL,
+                payment_id TEXT NOT NULL,
+                credits INTEGER NOT NULL,
+                status TEXT NOT NULL CHECK (status IN ('pending', 'canceled', 'approved', 'refund')),
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+        "
+    fi
+
+    echo "🎉 Database setup complete!"
+    return 0
+}
+
 start() {
-    echo "Starting $NAME..."
+    start_database
+    if [ $? -ne 0 ]; then
+        echo "❌ Failed to start database container."
+        return 1
+    fi
+
+    echo "🚀 Starting $NAME..."
 
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-        echo "$NAME is already running."
+        echo "⚠️ $NAME is already running."
         return 0
     fi
 
@@ -31,17 +139,18 @@ start() {
 
     cd "$PROD_DIR" || exit 1
 
+    echo "📡 Launching bot..."
     nohup $CMD >> "$LOGFILE" 2>&1 &
     echo $! > "$PIDFILE"
 
-    echo "$NAME started with PID $(cat "$PIDFILE")."
+    echo "✅ $NAME started with PID $(cat "$PIDFILE")."
 }
 
 stop() {
-    echo "Stopping $NAME..."
+    echo "🛑 Stopping $NAME..."
 
     if [ ! -f "$PIDFILE" ]; then
-        echo "PID file not found. Is it running?"
+        echo "❓ PID file not found. Is it running?"
         return 1
     fi
 
@@ -51,42 +160,41 @@ stop() {
         kill "$PID"
         sleep 1
         rm -f "$PIDFILE"
-        echo "$NAME stopped."
+        echo "🧹 $NAME stopped."
     else
-        echo "Process not running. Cleaning up PID."
+        echo "⚠️ Process not running. Cleaning PID."
         rm -f "$PIDFILE"
     fi
 }
 
 restart() {
-    echo "Restarting $NAME..."
+    echo "🔄 Restarting $NAME..."
     stop
     sleep 1
     start
 }
 
 deploy() {
-    echo "Deploying new version..."
+    echo "📦 Deploying new version..."
 
     stop
-
     cd "$PROD_DIR" || exit 1
 
+    echo "🔁 Pulling latest version from GitHub..."
     git fetch origin main
-
     git pull origin main
 
-    echo "Restarting service..."
+    echo "🚀 Restarting service..."
     start
 
-    echo "Deploy completed."
+    echo "🎉 Deploy completed!"
 }
 
 status() {
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-        echo "$NAME is running with PID $(cat "$PIDFILE")."
+        echo "🟢 $NAME is running with PID $(cat "$PIDFILE")."
     else
-        echo "$NAME is not running."
+        echo "🔴 $NAME is not running."
     fi
 }
 
@@ -97,7 +205,7 @@ case "$1" in
     deploy)  deploy ;;
     status)  status ;;
     *)
-        echo "Usage: $0 {start|stop|restart|deploy|status}"
+        echo "📘 Usage: $0 {start|stop|restart|deploy|status}"
         exit 1 ;;
 esac
 

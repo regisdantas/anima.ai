@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 from app.database.models.user import User
-from app.logger import log_error
+from app.logger import log_info, log_error
 from app.database.repositories.user_repo import (
     get_user_by_telegram_id,
     create_user,
@@ -23,8 +23,8 @@ def load_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not message:
             return None
 
-        name = message.from_user.first_name
-        telegram_id = message.from_user.id
+        name = message.chat.first_name
+        telegram_id = message.chat.id
 
         user = get_user_by_telegram_id(telegram_id)
 
@@ -35,7 +35,9 @@ def load_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if not user:
                 raise Exception("Failed to create user")
 
-        print(user.uuid, user.telegram_id, user.name, user.credit_balance)
+        log_info(
+            f"User login: {user.uuid} {user.telegram_id} {user.name} {user.created_at} {user.credit_balance}"
+        )
         return user
 
     except Exception as e:

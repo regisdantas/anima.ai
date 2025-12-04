@@ -2,6 +2,7 @@ import os
 from psycopg_pool import ConnectionPool
 from contextlib import contextmanager
 from dotenv import load_dotenv
+from app.logger import log_error
 
 load_dotenv()
 
@@ -21,7 +22,8 @@ def get_conn():
     try:
         yield conn
         conn.commit()
-    except Exception:
+    except Exception as e:
+        log_error("[ERROR] An error occurred:", e)
         conn.rollback()
         raise
     finally:

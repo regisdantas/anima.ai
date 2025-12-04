@@ -44,15 +44,19 @@ def get_last_history_by_telegram_id(telegram_id: str) -> HistoryRecord | None:
     )
 
 
-def get_history_by_user_id(user_id: str) -> list[HistoryRecord]:
+def get_history_by_telegram_id(telegram_id: str, count: int = 1) -> list[HistoryRecord]:
     rows = query(
         """
         SELECT id, user_id, telegram_id, message_type, content, created_at
         FROM history
-        WHERE user_id = %s
+        WHERE telegram_id = %s
         ORDER BY created_at DESC
+        LIMIT %s
         """,
-        (str(user_id),),
+        (
+            str(telegram_id),
+            str(count),
+        ),
     )
 
     return [

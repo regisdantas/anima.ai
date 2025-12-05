@@ -109,7 +109,7 @@ async def handle_voice_message(
         await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
         return
 
-    valid = process_request_and_debit(user.telegram_id, VALUE_AUDIO)
+    valid = process_request_and_debit(user.telegram_id, VALUE_AUDIO_SPEECH)
     if not valid:
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.no-credits-audio")
@@ -135,7 +135,7 @@ async def handle_voice_message(
             log_error(e)
             retries -= 1
             if retries == 0:
-                process_refund(user.telegram_id, VALUE_AUDIO)
+                process_refund(user.telegram_id, VALUE_AUDIO_SPEECH)
                 await update.message.reply_text(
                     get_text("pt_BR", "messages.user-message.transcribe-error").format(
                         user_balance=user.credit_balance

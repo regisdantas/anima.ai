@@ -65,7 +65,7 @@ async def handle_user_message(
         await update.message.reply_text(too_short_message)
         return
 
-    valid = process_request_and_debit(user.telegram_id, VALUE_DESCRIPTION)
+    valid = process_request_and_debit(user, VALUE_DESCRIPTION)
     if not valid:
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.no-credits")
@@ -88,7 +88,7 @@ async def handle_user_message(
 
     except Exception as e:
         log_error(e)
-        process_refund(user.telegram_id, VALUE_DESCRIPTION)
+        process_refund(user, VALUE_DESCRIPTION)
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.error").format(
                 user_balance=user.credit_balance
@@ -109,7 +109,7 @@ async def handle_voice_message(
         await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
         return
 
-    valid = process_request_and_debit(user.telegram_id, VALUE_AUDIO_SPEECH)
+    valid = process_request_and_debit(user, VALUE_AUDIO_SPEECH)
     if not valid:
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.no-credits-audio")
@@ -135,7 +135,7 @@ async def handle_voice_message(
             log_error(e)
             retries -= 1
             if retries == 0:
-                process_refund(user.telegram_id, VALUE_AUDIO_SPEECH)
+                process_refund(user, VALUE_AUDIO_SPEECH)
                 await update.message.reply_text(
                     get_text("pt_BR", "messages.user-message.transcribe-error").format(
                         user_balance=user.credit_balance

@@ -34,7 +34,7 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         )
         return
 
-    valid = process_request_and_debit(user.telegram_id, VALUE_AUDIO_SPEECH)
+    valid = process_request_and_debit(user, VALUE_AUDIO_SPEECH)
     if not valid:
         await update.message.reply_text(
             get_text("pt_BR", "messages.user-message.no-credits")
@@ -52,18 +52,20 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 break
             except Exception as e:
                 log_error("[ERROR] An error occurred:", e)
-                process_refund(user.telegram_id, VALUE_AUDIO_SPEECH)
+                process_refund(user, VALUE_AUDIO_SPEECH)
                 retries -= 1
                 if retries == 0:
                     await update.message.reply_text(
-                        get_text("pt_BR", "messages.user-message.audio-error")
+                        get_text("pt_BR", "messages.user-message.audio-error").format(
+                            user.credit_balance
+                        )
                     )
                     return
         try:
             await update.message.reply_voice(voice=audio)
         except Exception as e:
             log_error("[ERROR] An error occurred:", e)
-            process_refund(user.telegram_id, VALUE_AUDIO_SPEECH)
+            process_refund(user, VALUE_AUDIO_SPEECH)
             await update.message.reply_text(
                 get_text("pt_BR", "messages.user-message.audio-error").format(
                     user.credit_balance

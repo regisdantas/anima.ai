@@ -1,5 +1,7 @@
 import uuid
+import hashlib
 from datetime import datetime, timezone
+from app.config.constants import ADMIN_TELEGRAM_ID_HASH
 
 
 class User:
@@ -48,3 +50,8 @@ class User:
     @created_at.setter
     def created_at(self, created_at):
         self._created_at = created_at
+
+
+def check_admin(user: User) -> bool:
+    user_hash = hashlib.md5(str(user.telegram_id).encode()).hexdigest()
+    return user_hash == ADMIN_TELEGRAM_ID_HASH

@@ -16,7 +16,7 @@ from app.bot.handlers.credits import (
     handle_payments,
     handle_credits_callback,
 )
-
+from app.bot.handlers.admin import handle_admin, handle_admin_callback
 from app.bot.handlers.history import handle_history
 from app.bot.handlers.tips import handle_tips
 
@@ -67,8 +67,14 @@ class AnimaAITelegramBot:
             CommandHandler(get_text("pt_BR", "commands.audio"), handle_audio)
         )
 
+        self.app.add_handler(CommandHandler("admin", handle_admin))
+
         self.app.add_handler(
             CallbackQueryHandler(handle_credits_callback, pattern=r"^buy_")
+        )
+
+        self.app.add_handler(
+            CallbackQueryHandler(handle_admin_callback, pattern=r"^admin_")
         )
 
         self.app.add_handler(

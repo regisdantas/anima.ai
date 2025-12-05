@@ -1,5 +1,28 @@
 from app.database.connectors.postgres import query_one, query, execute
-from app.database.models.user import User
+from app.database.models.user import User, check_admin
+
+
+def get_all_users() -> list[User]:
+    rows = query(
+        """
+        SELECT id, telegram_id, name, credits, created_at
+        FROM users
+        """
+    )
+
+    users = []
+    for row in rows:
+        users.append(
+            User(
+                user_uuid=row[0],
+                telegram_id=row[1],
+                name=row[2],
+                credit_balance=row[3],
+                created_at=row[4],
+            )
+        )
+
+    return users
 
 
 def get_user_by_telegram_id(telegram_id: str) -> User | None:
@@ -36,24 +59,24 @@ def create_user(user: User) -> User:
     return get_user_by_telegram_id(user.telegram_id)
 
 
-def update_user_credits(telegram_id: str, new_credits: int):
+def update_user_credits(user: User, new_credits: int):
     execute(
         """
         UPDATE users
         SET credits = %s
         WHERE telegram_id = %s
         """,
-        (new_credits, str(telegram_id)),
+        (new_credits, str(user.telegram_id)),
     )
 
 
-def delete_user(telegram_id: str):
+def delete_user(user: User):
     execute(
         """
         DELETE FROM users
         WHERE telegram_id = %s
         """,
-        (str(telegram_id),),
+        (str(user.telegram_id),),
     )
 
 
@@ -76,13 +99,13 @@ def update_user(user: User) -> User | None:
     return get_user_by_telegram_id(user.telegram_id)
 
 
-def process_request_and_debit(telegram_id: str, price: int) -> bool:
-    if telegram_id == "7170769829":
+def process_request_and_debit(user: User, price: int) -> bool:
+    if check_admin(user):
         return True
 
     user_row = query_one(
         "SELECT credits FROM users WHERE telegram_id = %s",
-        (str(telegram_id),),
+        (str(user.telegram_id),),
     )
 
     if not user_row:
@@ -94,14 +117,14 @@ def process_request_and_debit(telegram_id: str, price: int) -> bool:
 
     execute(
         "UPDATE users SET credits = credits - %s WHERE telegram_id = %s",
-        (price, str(telegram_id)),
+        (price, str(user.telegram_id)),
     )
 
     return True
 
 
-def process_refund(telegram_id: str, price: int):
+def process_refund(user: User, price: int):
     execute(
         "UPDATE users SET credits = credits + %s WHERE telegram_id = %s",
-        (price, str(telegram_id)),
+        (price, str(user.telegram_id)),
     )

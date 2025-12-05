@@ -58,7 +58,7 @@ async def handle_user_message(
         return
 
     user_msg = update.message.text
-    if len(user_msg) < 10:
+    if len(user_msg) < 100:
         too_short_message = get_text(
             "pt_BR", "messages.user-message.prompt-too-short"
         ).format(user_name=user.name)

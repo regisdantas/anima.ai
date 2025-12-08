@@ -7,7 +7,7 @@ from telegram.constants import ChatAction
 
 from app.ai.ai import get_ai
 from app.database.models.user import User
-from app.anima.dream_pipeline import handle_dream
+from app.anima.anima_pipeline import handle_dream
 from app.bot.utils.context_utils import load_user
 from app.bot.lang.language import get_text
 from app.logger import log_info, log_error

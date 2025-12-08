@@ -5,7 +5,7 @@ from app.database.models.user import User, check_admin
 def get_all_users() -> list[User]:
     rows = query(
         """
-        SELECT id, telegram_id, name, credits, created_at
+        SELECT id, telegram_id, name, credits, created_at, silence
         FROM users
         """
     )
@@ -19,6 +19,7 @@ def get_all_users() -> list[User]:
                 name=row[2],
                 credit_balance=row[3],
                 created_at=row[4],
+                silence=row[5],
             )
         )
 
@@ -28,7 +29,7 @@ def get_all_users() -> list[User]:
 def get_user_by_telegram_id(telegram_id: str) -> User | None:
     row = query_one(
         """
-        SELECT id, telegram_id, name, credits, created_at
+        SELECT id, telegram_id, name, credits, created_at, silence
         FROM users
         WHERE telegram_id = %s
         """,
@@ -44,22 +45,23 @@ def get_user_by_telegram_id(telegram_id: str) -> User | None:
         name=row[2],
         credit_balance=row[3],
         created_at=row[4],
+        silence=row[5],
     )
 
 
 def create_user(user: User) -> User:
     execute(
         """
-        INSERT INTO users (telegram_id, name, credits)
-        VALUES (%s, %s, %s)
+        INSERT INTO users (telegram_id, name, credits, silence)
+        VALUES (%s, %s, %s, %s)
         """,
-        (str(user.telegram_id), user.name, user.credit_balance),
+        (str(user.telegram_id), user.name, user.credit_balance, user.silence),
     )
 
     return get_user_by_telegram_id(user.telegram_id)
 
 
-def update_user_credits(user: User, new_credits: int):
+def update_user_credits(user: User, new_credits: int) -> User | None:
     execute(
         """
         UPDATE users
@@ -68,6 +70,21 @@ def update_user_credits(user: User, new_credits: int):
         """,
         (new_credits, str(user.telegram_id)),
     )
+
+    return get_user_by_telegram_id(user.telegram_id)
+
+
+def update_user_silence(user: User, silence: bool) -> User | None:
+    execute(
+        """
+        UPDATE users
+        SET silence = %s
+        WHERE telegram_id = %s
+        """,
+        (silence, str(user.telegram_id)),
+    )
+
+    return get_user_by_telegram_id(user.telegram_id)
 
 
 def delete_user(user: User):
@@ -86,12 +103,14 @@ def update_user(user: User) -> User | None:
         UPDATE users
         SET
             name = %s,
-            credits = %s
+            credits = %s,
+            silence = %s
         WHERE telegram_id = %s
         """,
         (
             user.name,
             user.credit_balance,
+            user.silence,
             str(user.telegram_id),
         ),
     )

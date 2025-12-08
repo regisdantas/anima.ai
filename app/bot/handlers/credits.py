@@ -50,7 +50,7 @@ async def update_payments(
             if new_status != pay.status:
                 pay.status = new_status
                 update_payment_status(pay.payment_id, new_status)
-                update_user_credits(pay.telegram_id, user.credit_balance + pay.credits)
+                user = update_user_credits(user, user.credit_balance + pay.credits)
                 await update.message.reply_text(
                     get_text("pt_BR", "messages.credits.bought").format(pay.credits)
                 )

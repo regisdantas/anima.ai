@@ -76,6 +76,7 @@ async def handle_tarot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         )
         await update.message.reply_text(interpret_message)
         history = get_history_by_telegram_id(telegram_id=user.telegram_id, count=4)
+        history.reverse()
         await handle_tarot_pipeline(
             user,
             user_msg,

@@ -78,6 +78,7 @@ async def handle_user_message(
         )
         await update.message.reply_text(interpret_message)
         history = get_history_by_telegram_id(telegram_id=user.telegram_id, count=4)
+        history.reverse()
         await handle_dream(
             user,
             user_msg,
@@ -151,6 +152,7 @@ async def handle_voice_message(
     )
     await update.message.reply_text(interpret_message)
     history = get_history_by_telegram_id(telegram_id=user.telegram_id, count=4)
+    history.reverse()
     await handle_dream(
         user, text, history, send_response, {"update": update, "context": context}
     )

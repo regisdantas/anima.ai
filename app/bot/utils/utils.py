@@ -1,5 +1,6 @@
 import io
 import qrcode
+import random
 
 
 def generate_qr_code(pix_code):
@@ -12,3 +13,7 @@ def generate_qr_code(pix_code):
     img_buffer.seek(0)
 
     return img_buffer
+
+
+def get_random(items: list) -> any:
+    return random.choice(items) if items else None

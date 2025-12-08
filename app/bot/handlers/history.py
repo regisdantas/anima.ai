@@ -19,6 +19,7 @@ async def handle_history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         return
 
     history = get_history_by_telegram_id(user.telegram_id, 10)
+    history.reverse()
     if history:
         await update.message.reply_text(get_text("pt_BR", "messages.history.header"))
         for entry in history:

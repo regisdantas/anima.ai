@@ -36,5 +36,9 @@ async def handle_silence(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await update.message.reply_text(get_text("pt_BR", "messages.unknown-user"))
         return
 
-    user = update_user_silence(user, True)
-    await update.message.reply_text(get_text("pt_BR", "messages.terms.silence"))
+    user = update_user_silence(user, not user.silence)
+    await update.message.reply_text(
+        get_text("pt_BR", "messages.terms.silence").format(
+            user_silence="ativado" if user.silence else "desativado"
+        )
+    )

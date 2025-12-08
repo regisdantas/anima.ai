@@ -3,6 +3,7 @@ from telegram.ext import ContextTypes
 from app.database.repositories.user_repo import get_all_users
 from app.config.constants import VALUE_DESCRIPTION, VALUE_AUDIO_TRANSCRIPTION
 from app.bot.lang.language import get_text
+from app.bot.utils.utils import get_random
 
 
 async def handle_morning(context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -10,9 +11,12 @@ async def handle_morning(context: ContextTypes.DEFAULT_TYPE) -> None:
     for user in user_list:
         if user.silence:
             continue
+        inspiration = get_random(get_text("pt_BR", "messages.daily.inspirations"))
         await context.bot.send_message(
             user.telegram_id,
-            get_text("pt_BR", "messages.daily-morning").format(user_name=user.name),
+            get_text("pt_BR", "messages.daily.morning").format(
+                user_name=user.name, inspiration=inspiration
+            ),
         )
         await context.bot.send_message(
             user.telegram_id,

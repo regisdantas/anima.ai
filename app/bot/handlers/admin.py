@@ -4,6 +4,7 @@ from telegram.ext import ContextTypes
 from app.database.models.user import User, check_admin
 from app.bot.utils.context_utils import load_user
 from app.database.repositories.user_repo import get_all_users
+from app.bot.handlers.daily import handle_morning
 
 
 async def handle_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -15,7 +16,11 @@ async def handle_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 InlineKeyboardButton(
                     f"List Users",
                     callback_data=f"admin_list_users",
-                )
+                ),
+                InlineKeyboardButton(
+                    f"Morning",
+                    callback_data=f"admin_morning",
+                ),
             ]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
@@ -40,3 +45,6 @@ async def handle_admin_callback(
                 [f"{u.name} ({u.telegram_id}) - {u.credit_balance}" for u in users]
             )
             await query.edit_message_text(f"{user_list}")
+        elif query.data == "admin_morning":
+            await handle_morning(context)
+            await query.edit_message_text("Morning messages sent to all users.")

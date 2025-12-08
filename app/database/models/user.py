@@ -12,11 +12,13 @@ class User:
         telegram_id: str = None,
         credit_balance: int = None,
         created_at: str = None,
+        silence: bool = False,
     ):
         self._uuid = user_uuid if user_uuid else str(uuid.uuid4())
         self._name = name or "Unknown Name"
         self._telegram_id = telegram_id or "-1"
         self._credit_balance = credit_balance or 0
+        self._silence = silence or False
         self._created_at = created_at or datetime.now(timezone.utc)
 
     @property
@@ -50,6 +52,14 @@ class User:
     @created_at.setter
     def created_at(self, created_at):
         self._created_at = created_at
+
+    @property
+    def silence(self):
+        return self._silence
+
+    @silence.setter
+    def silence(self, silence):
+        self._silence = silence
 
 
 def check_admin(user: User) -> bool:

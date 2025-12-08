@@ -39,4 +39,4 @@ async def handle_admin_callback(
             user_list = "\n".join(
                 [f"{u.name} ({u.telegram_id}) - {u.credit_balance}" for u in users]
             )
-            await query.edit_message_text(f"Registered Users:\n{user_list}")
+            await query.edit_message_text(f"{user_list}")

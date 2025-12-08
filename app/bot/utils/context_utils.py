@@ -5,7 +5,6 @@ from app.logger import log_info, log_error
 from app.database.repositories.user_repo import (
     get_user_by_telegram_id,
     create_user,
-    update_user_credits,
 )
 
 

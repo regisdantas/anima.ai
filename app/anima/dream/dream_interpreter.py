@@ -1,39 +1,23 @@
 import json
 import uuid
-from app.ai.ai import get_ai
+from app.ai.ai import query_llm
 from app.bot.utils.format_utils import split_message
 from app.logger import log_error
 from app.database.models.history import HistoryRecord
 
-prompts = {}
+dream_prompts = {}
 
 with open("app/anima/prompts/jung.json", "r") as file:
-    prompts["jung"] = json.load(file)
-
-
-async def query_llm(prompt: str, retries: int = 3):
-    ai = get_ai()
-    retries = 3
-    while retries > 0:
-        try:
-            response = await ai["llm"].generate_response(prompt)
-            break
-        except Exception as e:
-            log_error("[ERROR] An error occurred:", e)
-            retries -= 1
-            if retries == 0:
-                return None
-
-    return response
+    dream_prompts["jung"] = json.load(file)
 
 
 async def interpret_dream(
     dream_description: str, history: list[HistoryRecord] = []
-) -> str:
-    global prompts
+) -> dict:
+    global dream_prompts
     result = {}
 
-    prompt = prompts["jung"]["interpretation_prompt"].format(
+    prompt = dream_prompts["jung"]["interpretation_prompt"].format(
         uuid=str(uuid.uuid4()),
         lines=20,
         dream_description=dream_description,

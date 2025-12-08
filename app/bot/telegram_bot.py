@@ -1,5 +1,7 @@
 import os
+import pytz
 from dotenv import load_dotenv
+from datetime import time
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -8,6 +10,7 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
+
 
 from app.bot.lang.language import get_text
 from app.bot.handlers.start import handle_start, handle_menu, handle_help
@@ -20,9 +23,13 @@ from app.bot.handlers.admin import handle_admin, handle_admin_callback
 from app.bot.handlers.history import handle_history
 from app.bot.handlers.tips import handle_tips
 
-from app.bot.handlers.terms import handle_terms, handle_delete
+from app.bot.handlers.terms import handle_terms, handle_delete, handle_silence
 from app.bot.handlers.user_message import handle_user_message, handle_voice_message
 from app.bot.handlers.audio import handle_audio
+from app.bot.handlers.daily import handle_morning
+from app.bot.handlers.tarot import handle_tarot
+
+BRAZIL_TZ = pytz.timezone("America/Sao_Paulo")
 
 
 class AnimaAITelegramBot:
@@ -34,6 +41,14 @@ class AnimaAITelegramBot:
             Application.builder().token(token).connect_timeout(30).defaults(df).build()
         )
         self.setup_handlers()
+        self.setup_jobs()
+
+    def setup_jobs(self):
+        self.app.job_queue.run_daily(
+            handle_morning,
+            time=time(8, 0, 0, tzinfo=BRAZIL_TZ),
+            name="morning_daily_task",
+        )
 
     def setup_handlers(self):
         self.app.add_handler(
@@ -55,10 +70,16 @@ class AnimaAITelegramBot:
             CommandHandler(get_text("pt_BR", "commands.history"), handle_history)
         )
         self.app.add_handler(
+            CommandHandler(get_text("pt_BR", "commands.tarot"), handle_tarot)
+        )
+        self.app.add_handler(
             CommandHandler(get_text("pt_BR", "commands.tips"), handle_tips)
         )
         self.app.add_handler(
             CommandHandler(get_text("pt_BR", "commands.terms"), handle_terms)
+        )
+        self.app.add_handler(
+            CommandHandler(get_text("pt_BR", "commands.silence"), handle_silence)
         )
         self.app.add_handler(
             CommandHandler(get_text("pt_BR", "commands.delete"), handle_delete)

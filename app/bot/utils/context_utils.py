@@ -35,7 +35,7 @@ def load_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 raise Exception("Failed to create user")
 
         log_info(
-            f"User login: {user.uuid} {user.telegram_id} {user.name} {user.created_at} {user.credit_balance}"
+            f"User {user.telegram_id} {user.name}[{user.credit_balance}]:\nMessage: {message.text}\n------------------------------------------"
         )
         return user
 

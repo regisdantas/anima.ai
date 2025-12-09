@@ -60,7 +60,7 @@
         },
         "tarot": {
             "no-question": "Sua pergunta para o Tarot parece muito curta, {user_name}. Por favor, forneça mais detalhes.\n\n /tarot <sua pergunta>",
-            "question-ok": "Obrigado por sua pergunta, {user_name}! Deixe-me ver...",
+            "question-ok": "Obrigado por sua pergunta, {user_name}!\n\nEnquanto eu tiro a carta, mentalize sua pergunta. Foco nas suas intenções.\nVamos ver, deixe-me ver a carta...",
             "no-credits": "Desculpe, você não tem créditos suficientes para uma leitura de Tarot.\nVeja seus créditos e como adquirir mais:\n\n    💸 /creditos",
             "error": "Desculpe, houve um erro ao processar sua pergunta de Tarot. Por favor, tente novamente mais tarde.\nCréditos devolvidos.\n\nSaldo atual: {user_balance} créditos."
         },

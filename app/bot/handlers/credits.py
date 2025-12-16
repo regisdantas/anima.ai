@@ -50,10 +50,11 @@ async def update_payments(
             if new_status != pay.status:
                 pay.status = new_status
                 update_payment_status(pay.payment_id, new_status)
-                user = update_user_credits(user, user.credit_balance + pay.credits)
-                await update.message.reply_text(
-                    get_text("pt_BR", "messages.credits.bought").format(pay.credits)
-                )
+                if new_status == "approved":
+                    user = update_user_credits(user, user.credit_balance + pay.credits)
+                    await update.message.reply_text(
+                        get_text("pt_BR", "messages.credits.bought").format(pay.credits)
+                    )
 
 
 async def handle_credits(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

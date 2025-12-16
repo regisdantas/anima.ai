@@ -65,7 +65,7 @@
             "error": "Desculpe, houve um erro ao processar sua pergunta de Tarot. Por favor, tente novamente mais tarde.\nCréditos devolvidos.\n\nSaldo atual: {user_balance} créditos."
         },
         "daily":{
-            "morning": "🌞 Muito bom dia, {user_name}!\n\n✨ {inspiration} ✨\n\n😴 Que tal anotar seus sonhos enquanto ainda estão frescos?\n\n🔮 Agora também leio cartas de tarot.\n\n    🃏 /tarot <faça uma pergunta>\n    🤫 /silencio para desativas notificações diárias.",
+            "morning": "🌞 Muito bom dia, {user_name}!\n\n✨ {inspiration}\n\n😴 Que tal anotar seus sonhos enquanto ainda estão frescos?\n\n🔮 Agora também leio cartas de tarot.\n\n    🃏 /tarot <faça uma pergunta>\n    🤫 /silencio para desativas notificações diárias.\n\n🌌 Quando quiser, é só me contar seu sonho. Estou aqui para caminhar com você.\n\n🎙️ Pode me enviar mensagens de áudio também.",
             "inspirations": [
                 "Hoje é um bom dia para recomeçar.",
                 "Você é mais forte do que imagina.",

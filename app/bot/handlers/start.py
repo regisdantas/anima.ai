@@ -25,9 +25,6 @@ async def handle_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     else:
         await update.message.reply_text(get_text("pt_BR", "messages.welcome.new-user"))
     await update.message.reply_text(
-        get_text("pt_BR", "messages.welcome.welcome-message")
-    )
-    await update.message.reply_text(
         get_text("pt_BR", "messages.menu").format(
             user_balance=user.credit_balance if user else 0,
             value_description=VALUE_DESCRIPTION,
@@ -37,14 +34,6 @@ async def handle_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def handle_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user = load_user(update, context)
     await update.message.reply_text(
         get_text("pt_BR", "messages.welcome.welcome-message")
-    )
-    await update.message.reply_text(
-        get_text("pt_BR", "messages.menu").format(
-            user_balance=user.credit_balance,
-            value_description=VALUE_DESCRIPTION,
-            value_audio=VALUE_AUDIO_TRANSCRIPTION,
-        )
     )

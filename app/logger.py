@@ -15,10 +15,7 @@ if not logger.handlers:
     console_handler.setLevel(logging.INFO)
 
     file_handler = RotatingFileHandler(
-        LOG_FILE,
-        maxBytes=5 * 1024 * 1024,
-        backupCount=5,
-        encoding="utf-8"
+        LOG_FILE, maxBytes=5 * 1024 * 1024, backupCount=5, encoding="utf-8"
     )
     file_handler.setLevel(logging.INFO)
 

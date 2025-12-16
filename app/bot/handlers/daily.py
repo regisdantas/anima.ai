@@ -23,14 +23,6 @@ async def handle_morning(context: ContextTypes.DEFAULT_TYPE) -> None:
                     user_name=user.name, inspiration=inspiration
                 ),
             )
-            await context.bot.send_message(
-                user.telegram_id,
-                get_text("pt_BR", "messages.menu").format(
-                    user_balance=user.credit_balance if user else 0,
-                    value_description=VALUE_DESCRIPTION,
-                    value_audio=VALUE_AUDIO_TRANSCRIPTION,
-                ),
-            )
         except Forbidden:
             log_info(f"User {user.name} has blocked the bot. Updating silence status.")
             update_user_silence(user, True)

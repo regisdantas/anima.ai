@@ -57,7 +57,7 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 if retries == 0:
                     await update.message.reply_text(
                         get_text("pt_BR", "messages.user-message.audio-error").format(
-                            user.credit_balance
+                            user_balance=user.credit_balance
                         )
                     )
                     return
@@ -68,7 +68,7 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             process_refund(user, VALUE_AUDIO_SPEECH)
             await update.message.reply_text(
                 get_text("pt_BR", "messages.user-message.audio-error").format(
-                    user.credit_balance
+                    user_balance=user.credit_balance
                 )
             )
             return

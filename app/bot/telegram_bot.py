@@ -5,6 +5,7 @@ from datetime import time
 from telegram.ext import (
     Application,
     CommandHandler,
+    ConversationHandler,
     CallbackQueryHandler,
     Defaults,
     MessageHandler,
@@ -19,7 +20,12 @@ from app.bot.handlers.credits import (
     handle_payments,
     handle_credits_callback,
 )
-from app.bot.handlers.admin import handle_admin, handle_admin_callback
+from app.bot.handlers.admin import (
+    handle_admin,
+    handle_admin_callback,
+    handle_admin_credit,
+    ADMIN_CREDIT,
+)
 from app.bot.handlers.history import handle_history
 from app.bot.handlers.tips import handle_tips
 
@@ -95,7 +101,19 @@ class AnimaAITelegramBot:
         )
 
         self.app.add_handler(
-            CallbackQueryHandler(handle_admin_callback, pattern=r"^admin_")
+            ConversationHandler(
+                entry_points=[
+                    CallbackQueryHandler(handle_admin_callback, pattern="^admin_")
+                ],
+                states={
+                    ADMIN_CREDIT: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND, handle_admin_credit
+                        )
+                    ]
+                },
+                fallbacks=[],
+            )
         )
 
         self.app.add_handler(

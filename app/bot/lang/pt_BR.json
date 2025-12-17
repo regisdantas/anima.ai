@@ -48,7 +48,8 @@
             "bought": "Pagamento processado...\nVocê comprou {} créditos.",
             "show-pix": "Só copiar e pagar via pix:",
             "check-payment": "Após efetuar o pagamento, digite:\n\n    💰 /pagamentos",
-            "error-pix": "Erro a gerar pagamento. Tente novamente mais tarde."
+            "error-pix": "Erro a gerar pagamento. Tente novamente mais tarde.",
+            "gift": "🎉 Você ganhou {amount} créditos!\n\nSaldo atual: {user_balance} créditos."
         },
         "payments": {
             "payments-menu": "Nenhum pagamento pendente."
